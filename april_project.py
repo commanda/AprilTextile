@@ -53,8 +53,12 @@ A4 = 440
 B4 = 494
 C5 = 523
 
-pixels = neopixel.NeoPixel(board.A1, 2, brightness=0.5)
-pixels[0] = (255,255,0)
+
+onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.05)
+
+outboardPixels = neopixel.NeoPixel(board.A1, 2, brightness=0.5)
+
+pixels = onboardPixels
 
 curColor = []
 for i in range(len(pixels)):
@@ -89,29 +93,35 @@ while True:
     if cpx.touch_A1:
         print('Touched C4')
         cpx.start_tone(C4)
+        breathe(6)
     elif cpx.touch_A2:
         print('Touched D')
         cpx.start_tone(D4)
-        breathe(0)
+        breathe(7)
     elif cpx.touch_A3:
         print('Touched E')
         cpx.start_tone(E4)
-        breathe(1)
+        breathe(8)
     elif cpx.touch_A4:
         print('Touched F')
         cpx.start_tone(F4)
+        breathe(0)
     elif cpx.touch_A5:
         print('Touched G')
         cpx.start_tone(G4)
+        breathe(1)
     elif cpx.touch_A6 and not cpx.touch_A7:
         print('Touched A')
         cpx.start_tone(A4)
+        breathe(2)
     elif cpx.touch_A7 and not cpx.touch_A6:
         print('Touched B')
         cpx.start_tone(B4)
+        breathe(3)
     elif cpx.touch_A6 and cpx.touch_A7:
         print('Touched C5')
         cpx.start_tone(C5)
+        breathe(4)
     else:
         cpx.stop_tone()
         clearPixels()
