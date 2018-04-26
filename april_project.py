@@ -31,10 +31,13 @@ def lerp(v0, v1, t):
 def color_tween(color0, color1, t):
     return (int(lerp(color0[RED], color1[RED], t)), int(lerp(color0[GREEN], color1[GREEN], t)), int(lerp(color0[BLUE], color1[BLUE], t)))
 
-def clearPixels(pixels):
+def set_pixels_color(pixels, color):
     for i in range(len(pixels)):
-        pixels[i] = (0,0,0)
+        pixels[i] = color
     pixels.show()
+
+def clearPixels(pixels):
+    set_pixels_color(pixels, (0,0,0))
 
 def main():
 
@@ -57,12 +60,9 @@ def main():
     while True:
         time_since_start = tick_time - start_time
         normalized_t = normalize(time_since_start % tween_time, 0, tween_time)
-        color = color_tween((255,165,0), (0,0,255), normalized_t)
+        color = color_tween((255,140,0), (102,0,102), normalized_t)
         print("normalized_t: ",normalized_t)
-        for i in range(len(outboardPixels)):
-            pixels[i] = color
-            #outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
-        pixels.show()
+        set_pixels_color(pixels, color)
         tick_time = smart_delay(0.1, tick_time)
     
 
