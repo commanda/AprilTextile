@@ -28,7 +28,8 @@ def smart_delay(delay: float, last_time: float) -> float:
 
     return time.monotonic() 
 
-#def setColor():
+def lerp(v0, v1, t):
+    return (1.0 - t) * v0 + t * v1
 
 def clearPixels(pixels):
     for i in range(len(pixels)):
@@ -48,9 +49,8 @@ def main():
     clearPixels(pixels)
 
     tick_time = time.monotonic()
-    count = 0
+    
     while True:
-        count += 1
         for i in range(len(outboardPixels)):
             outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
         pixels.show()
