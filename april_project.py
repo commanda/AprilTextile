@@ -6,6 +6,11 @@ from digitalio import DigitalInOut, Direction, Pull
 import audioio
 from random import randint
 
+# constants 
+RED = 0
+GREEN = 1
+BLUE = 2
+
 def smart_delay(delay: float, last_time: float) -> float:
     now = time.monotonic()
     if delay > 0.0:
@@ -19,6 +24,9 @@ def smart_delay(delay: float, last_time: float) -> float:
 
 def lerp(v0, v1, t):
     return (1.0 - t) * v0 + t * v1
+    
+def color_tween(color0, color1, t):
+    return (int(lerp(color0[RED], color1[RED], t)), int(lerp(color0[GREEN], color1[GREEN], t)), int(lerp(color0[BLUE], color1[BLUE], t)))
 
 def clearPixels(pixels):
     for i in range(len(pixels)):
@@ -37,11 +45,17 @@ def main():
 
     clearPixels(pixels)
 
-    tick_time = time.monotonic()
+    
+    start_time = time.monotonic()
+    tick_time = start_time
+    
+    tween_time = 2.0
     
     while True:
+        color = color_tween((255,0,0), (0,0,255), (tick_time - start_time)/tween_time)
         for i in range(len(outboardPixels)):
-            outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
+            pixels[i] = color
+            #outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
         pixels.show()
         tick_time = smart_delay(0.1, tick_time)
     
