@@ -7,17 +7,6 @@ import audioio
 from random import randint
 
 def smart_delay(delay: float, last_time: float) -> float:
-    """
-    A "smart" delay mechanism which tries to reduce the
-    delay as much as possible based on the time the last
-    delay happened.
-
-    :param delay: delay in seconds
-    :param last_cmd: time of last command
-    :param remain: counter, skip delay unless it's zero
-
-    :return: timestamp to feed to next invocation
-    """
     now = time.monotonic()
     if delay > 0.0:
 
@@ -55,8 +44,6 @@ def main():
             outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
         pixels.show()
         tick_time = smart_delay(0.1, tick_time)
-    
-    
     
 
 main()
