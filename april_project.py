@@ -54,11 +54,11 @@ B4 = 494
 C5 = 523
 
 
-onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.05)
+onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=False)
 
-outboardPixels = neopixel.NeoPixel(board.A1, 2, brightness=0.5)
+outboardPixels = neopixel.NeoPixel(board.A1, 120, brightness=0.05, auto_write=False)
 
-pixels = onboardPixels
+pixels = outboardPixels
 
 curColor = []
 for i in range(len(pixels)):
@@ -75,17 +75,16 @@ def clearPixels():
     for i in range(len(pixels)):
         pixels[i] = (0,0,0)
         
+
 def breathe(pixelIndex):
     print("start breathe")
     currentBlue = curColor[pixelIndex]
     pixels[pixelIndex] = blues[currentBlue]
     curColor[pixelIndex] = (currentBlue + 1) % len(blues)
     print("end breathe")
-    
+   
 
-
-while True:
-    
+def playTone():    
     #if buttonA.value:
     #    play_file(audiofiles[0])
     
@@ -125,4 +124,15 @@ while True:
     else:
         cpx.stop_tone()
         clearPixels()
+
+
+
+count = 0
+while True:
+    print("yo ",count)
+    for i in range(len(outboardPixels)):
+        outboardPixels[i] = blues[count]
+    pixels.show()
+    count += 1
     time.sleep(0.1)
+    
