@@ -22,6 +22,9 @@ def smart_delay(delay: float, last_time: float) -> float:
 
     return time.monotonic() 
 
+def normalize(x, min, max):
+    return (x - min) / (max - min)
+
 def lerp(v0, v1, t):
     return (1.0 - t) * v0 + t * v1
     
@@ -52,7 +55,10 @@ def main():
     tween_time = 2.0
     
     while True:
-        color = color_tween((255,0,0), (0,0,255), (tick_time - start_time)/tween_time)
+        time_since_start = tick_time - start_time
+        normalized_t = normalize(time_since_start % tween_time, 0, tween_time)
+        color = color_tween((255,165,0), (0,0,255), normalized_t)
+        print("normalized_t: ",normalized_t)
         for i in range(len(outboardPixels)):
             pixels[i] = color
             #outboardPixels[i] = (randint(0,255),randint(0,255),randint(0,255))
