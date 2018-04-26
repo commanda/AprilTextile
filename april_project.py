@@ -54,7 +54,7 @@ B4 = 494
 C5 = 523
 
 
-onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=False)
+#onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=False)
 
 outboardPixels = neopixel.NeoPixel(board.A1, 120, brightness=0.05, auto_write=False)
 
@@ -74,65 +74,16 @@ blues = bluesCopy + bluesStart
 def clearPixels():
     for i in range(len(pixels)):
         pixels[i] = (0,0,0)
-        
-
-def breathe(pixelIndex):
-    print("start breathe")
-    currentBlue = curColor[pixelIndex]
-    pixels[pixelIndex] = blues[currentBlue]
-    curColor[pixelIndex] = (currentBlue + 1) % len(blues)
-    print("end breathe")
-   
-
-def playTone():    
-    #if buttonA.value:
-    #    play_file(audiofiles[0])
-    
-    
-    if cpx.touch_A1:
-        print('Touched C4')
-        cpx.start_tone(C4)
-        breathe(6)
-    elif cpx.touch_A2:
-        print('Touched D')
-        cpx.start_tone(D4)
-        breathe(7)
-    elif cpx.touch_A3:
-        print('Touched E')
-        cpx.start_tone(E4)
-        breathe(8)
-    elif cpx.touch_A4:
-        print('Touched F')
-        cpx.start_tone(F4)
-        breathe(0)
-    elif cpx.touch_A5:
-        print('Touched G')
-        cpx.start_tone(G4)
-        breathe(1)
-    elif cpx.touch_A6 and not cpx.touch_A7:
-        print('Touched A')
-        cpx.start_tone(A4)
-        breathe(2)
-    elif cpx.touch_A7 and not cpx.touch_A6:
-        print('Touched B')
-        cpx.start_tone(B4)
-        breathe(3)
-    elif cpx.touch_A6 and cpx.touch_A7:
-        print('Touched C5')
-        cpx.start_tone(C5)
-        breathe(4)
-    else:
-        cpx.stop_tone()
-        clearPixels()
+    pixels.show()
 
 
-
+clearPixels()
 count = 0
 while True:
     print("yo ",count)
     for i in range(len(outboardPixels)):
         outboardPixels[i] = blues[count]
     pixels.show()
-    count += 1
+    count = (count + 1) % len(blues)
     time.sleep(0.1)
     
