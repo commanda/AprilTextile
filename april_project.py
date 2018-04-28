@@ -43,13 +43,13 @@ def main():
 
     print("start")
 
-    onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=False)
+    onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.05, auto_write=False)
 
     outboardPixels = neopixel.NeoPixel(board.A1, 120, brightness=0.05, auto_write=False)
 
-    pixels = outboardPixels
 
-    clearPixels(pixels)
+    clearPixels(onboardPixels)
+    clearPixels(outboardPixels)
 
     
     start_time = time.monotonic()
@@ -62,7 +62,8 @@ def main():
         normalized_t = normalize(time_since_start % tween_time, 0, tween_time)
         color = color_tween((255,140,0), (102,0,102), normalized_t)
         print("normalized_t: ",normalized_t)
-        set_pixels_color(pixels, color)
+        set_pixels_color(outboardPixels, color)
+        set_pixels_color(onboardPixels, color)
         tick_time = smart_delay(0.1, tick_time)
     
 

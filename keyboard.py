@@ -5,30 +5,6 @@ import neopixel
 from digitalio import DigitalInOut, Direction, Pull
 import audioio
 
-# enable the speaker
-#speakerEnable = DigitalInOut(board.SPEAKER_ENABLE)
-#speakerEnable.direction = Direction.OUTPUT
-#speakerEnable.value = True
-
-# make the 2 input buttons
-#buttonA = DigitalInOut(board.BUTTON_A)
-#buttonA.direction = Direction.INPUT
-#button.pull = Pull.DOWN
-#buttonB = DigitalInOut(board.BUTTON_B)
-#buttonB.direction = Direction.INPUT
-#buttonB.pull = Pull.DOWN
-
-audiofiles = ["rimshot.wav"]
-
-def play_file(filename):
-    print("playing file " + filename)
-    f = open(filename, "rb")
-    a = audioio.AudioOut(board.SPEAKER, f)
-    a.play()
-    while a.playing:
-        pass
-    print("finished")
-    
 print("start")
 
 # set up note values in Hz. Find frequency values at https://pages.mtu.edu/~suits/notefreqs.html
@@ -53,7 +29,7 @@ A4 = 440
 B4 = 494
 C5 = 523
 
-pixels = neopixel.NeoPixel(board.A1, 2, brightness=0.5)
+pixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.05, auto_write=False)
 pixels[0] = (255,255,0)
 
 curColor = []
@@ -67,52 +43,50 @@ bluesStart.reverse()
 blues = bluesCopy + bluesStart
 
 
-def clearPixels():
+def set_pixels_color(pixels, color):
     for i in range(len(pixels)):
-        pixels[i] = (0,0,0)
-        
-def breathe(pixelIndex):
-    print("start breathe")
-    currentBlue = curColor[pixelIndex]
-    pixels[pixelIndex] = blues[currentBlue]
-    curColor[pixelIndex] = (currentBlue + 1) % len(blues)
-    print("end breathe")
-    
+        pixels[i] = color
+    pixels.show()
 
+def clearPixels(pixels):
+    set_pixels_color(pixels, (0,0,0))
+        
 
 while True:
     
-    #if buttonA.value:
-    #    play_file(audiofiles[0])
-    
-    
-    #if cpx.touch_A1:
-    #    print('Touched C')
-    #    cpx.start_tone(C4)
-    if cpx.touch_A2:
+    if cpx.touch_A1:
+        print('Touched C')
+        cpx.start_tone(C4)
+        set_pixels_color(pixels, (255,0,0))
+    elif cpx.touch_A2:
         print('Touched D')
         cpx.start_tone(D4)
-        breathe(0)
+        set_pixels_color(pixels, (255, 153, 0))
     elif cpx.touch_A3:
         print('Touched E')
         cpx.start_tone(E4)
-        breathe(1)
+        set_pixels_color(pixels, (255, 255, 0))
     elif cpx.touch_A4:
         print('Touched F')
         cpx.start_tone(F4)
+        set_pixels_color(pixels, (51, 204, 51))
     elif cpx.touch_A5:
         print('Touched G')
         cpx.start_tone(G4)
+        set_pixels_color(pixels, (51, 153, 255))
     elif cpx.touch_A6 and not cpx.touch_A7:
         print('Touched A')
         cpx.start_tone(A4)
+        set_pixels_color(pixels, (0, 0, 153))
     elif cpx.touch_A7 and not cpx.touch_A6:
         print('Touched B')
         cpx.start_tone(B4)
+        set_pixels_color(pixels, (153, 51, 255))
     elif cpx.touch_A6 and cpx.touch_A7:
         print('Touched C5')
         cpx.start_tone(C5)
+        set_pixels_color(pixels, (204, 0, 204))
     else:
         cpx.stop_tone()
-        clearPixels()
+        clearPixels(pixels)
     time.sleep(0.1)
