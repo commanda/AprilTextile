@@ -70,13 +70,7 @@ def main():
     clearPixels(onboardPixels)
     clearPixels(outboardPixels)
 
-	# button setup
-    button = board.BUTTON_A
-
-    start_time = time.monotonic()
-    tick_time = start_time
-
-    tween_time = 2.0
+    # spkrenable = DigitalInOut(board.SPEAKER_ENABLE)
 
     while True:
         handle_button()
