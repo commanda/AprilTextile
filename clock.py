@@ -17,6 +17,11 @@ RED = 0
 GREEN = 1
 BLUE = 2
 
+
+onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, num_onboard_leds, brightness=onboard_brightness, auto_write=False)
+
+outboardPixels = neopixel.NeoPixel(led_pin, num_outboard_leds, brightness=outboard_brightness, auto_write=False)
+
 def smart_delay(delay: float, last_time: float) -> float:
     now = time.monotonic()
     if delay > 0.0:
@@ -42,19 +47,31 @@ def set_pixels_color(pixels, color):
         pixels[i] = color
     pixels.show()
 
+button_state = False
 def clearPixels(pixels):
     set_pixels_color(pixels, (0,0,0))
+
+def handle_button():
+    global button_state
+    if (button_state != cpx.button_a):
+        button_state = cpx.button_a
+
+        if button_state:
+            cpx.red_led = True
+            set_pixels_color(onboardPixels, (255,255,255))
+        else:
+            cpx.red_led = False
+            clearPixels(onboardPixels)
 
 def main():
 
     print("start")
 
-    onboardPixels = neopixel.NeoPixel(board.NEOPIXEL, num_onboard_leds, brightness=onboard_brightness, auto_write=False)
-
-    outboardPixels = neopixel.NeoPixel(led_pin, num_outboard_leds, brightness=outboard_brightness, auto_write=False)
-
     clearPixels(onboardPixels)
     clearPixels(outboardPixels)
+
+	# button setup
+    button = board.BUTTON_A
 
     start_time = time.monotonic()
     tick_time = start_time
@@ -62,13 +79,7 @@ def main():
     tween_time = 2.0
 
     while True:
-        time_since_start = tick_time - start_time
-        normalized_t = normalize(time_since_start % tween_time, 0, tween_time)
-        color = color_tween((255,140,0), (102,0,102), normalized_t)
-        print("normalized_t: ",normalized_t)
-        set_pixels_color(outboardPixels, color)
-        set_pixels_color(onboardPixels, color)
-        tick_time = smart_delay(0.1, tick_time)
+        handle_button()
 
 
 main()
