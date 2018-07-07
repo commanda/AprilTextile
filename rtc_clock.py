@@ -39,6 +39,12 @@ def smart_delay(delay: float, last_time: float) -> float:
 
     return time.monotonic()
 
+def set_pixels_color(pixels, color):
+    for i in range(len(pixels)):
+        pixels[i] = color
+
+def clear_pixels(pixels):
+    set_pixels_color(pixels, (0,0,0))
 
 while True:
     start_time = time.monotonic()
@@ -46,8 +52,11 @@ while True:
     print(t.tm_hour, t.tm_min, t.tm_sec)
 
     # animate the pixels
-    seconds = t.tm_sec % 10
+    seconds = t.tm_sec % num_onboard_leds
     print(seconds)
+    clear_pixels(onboard_pixels)
+    pixels[seconds] = (255,255,0)
+    pixels.show()
 
     tick_time = start_time
     tick_time = smart_delay(1.0, tick_time)
