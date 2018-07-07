@@ -1,13 +1,32 @@
 import adafruit_ds3231
 import time
 import busio
-from board import *
+import neopixel
+import board
+import math
 
-myI2C = busio.I2C(SCL, SDA)
+# constants
+led_pin = board.A1
+num_outboard_leds = 120
+num_onboard_leds = 10
+outboard_brightness = 0.5
+onboard_brightness = 0.05
+RED = 0
+GREEN = 1
+BLUE = 2
+
+# initialize the I2C bus
+myI2C = busio.I2C(board.SCL, board.SDA)
+# create the rtc object to talk to the rtc board
 rtc = adafruit_ds3231.DS3231(myI2C)
 
 # initialize the time - set this to the current time if we need to reset the clock
 #rtc.datetime = time.struct_time((2018,7,6,22,33,0,0,9,-1))
+
+onboard_pixels = neopixel.NeoPixel(board.NEOPIXEL, num_onboard_leds, brightness=onboard_brightness, auto_write=False)
+
+pixels = onboard_pixels
+
 
 def smart_delay(delay: float, last_time: float) -> float:
     now = time.monotonic()
@@ -25,5 +44,10 @@ while True:
     start_time = time.monotonic()
     t = rtc.datetime
     print(t.tm_hour, t.tm_min, t.tm_sec)
+
+    # animate the pixels
+    seconds = t.tm_sec % 10
+    print(seconds)
+
     tick_time = start_time
     tick_time = smart_delay(1.0, tick_time)
