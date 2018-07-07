@@ -3,7 +3,7 @@ import time
 import busio
 import neopixel
 import board
-import math
+from math import *
 
 # constants
 led_pin = board.A1
@@ -49,14 +49,21 @@ def set_pixels_color(pixels, color):
 def clear_pixels(pixels):
     set_pixels_color(pixels, (0,0,0))
 
+def normalize(x, old_min, old_max, new_min, new_max):
+    return (((x - old_min) / (old_max - old_min)) * (new_max - new_min)) + new_min
+
+def put_value_into_pixels_range(x, max, num_leds):
+    return num_leds - floor(normalize(x, 0, max, 0, num_leds-1)) - 1
+
 while True:
     start_time = time.monotonic()
     t = rtc.datetime
 
     # animate the pixels
-    hour = t.tm_hour % num_onboard_leds
-    minute = t.tm_min % num_onboard_leds
-    second = t.tm_sec % num_onboard_leds
+    hour = put_value_into_pixels_range(t.tm_hour, 24, num_onboard_leds)
+    minute = put_value_into_pixels_range(t.tm_min, 60, num_onboard_leds)
+    second = put_value_into_pixels_range(t.tm_sec, 60, num_onboard_leds)
+
 
     print(t.tm_hour, t.tm_min, t.tm_sec)
     print(hour, minute, second)
