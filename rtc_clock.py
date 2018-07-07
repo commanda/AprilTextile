@@ -7,7 +7,7 @@ from math import *
 
 # constants
 led_pin = board.A1
-num_outboard_leds = 120
+num_outboard_leds = 85
 num_onboard_leds = 10
 outboard_brightness = 0.5
 onboard_brightness = 0.05
@@ -27,8 +27,12 @@ rtc = adafruit_ds3231.DS3231(myI2C)
 #rtc.datetime = time.struct_time((2018,7,6,22,33,0,0,9,-1))
 
 onboard_pixels = neopixel.NeoPixel(board.NEOPIXEL, num_onboard_leds, brightness=onboard_brightness, auto_write=False)
+#outboard_pixels = neopixel.NeoPixel(led_pin, num_outboard_leds, brightness=outboard_brightness, auto_write=False)
 
+#pixels = outboard_pixels
+#num_leds = num_outboard_leds
 pixels = onboard_pixels
+num_leds = num_onboard_leds
 
 
 def smart_delay(delay: float, last_time: float) -> float:
@@ -60,15 +64,15 @@ while True:
     t = rtc.datetime
 
     # animate the pixels
-    hour = put_value_into_pixels_range(t.tm_hour, 24, num_onboard_leds)
-    minute = put_value_into_pixels_range(t.tm_min, 60, num_onboard_leds)
-    second = put_value_into_pixels_range(t.tm_sec, 60, num_onboard_leds)
+    hour = put_value_into_pixels_range(t.tm_hour, 24, num_leds)
+    minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
+    second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
 
 
     print(t.tm_hour, t.tm_min, t.tm_sec)
     print(hour, minute, second)
 
-    clear_pixels(onboard_pixels)
+    clear_pixels(pixels)
     pixels[hour] = hour_color
     pixels[minute] = minute_color
     pixels[second] = second_color
