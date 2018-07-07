@@ -14,6 +14,9 @@ onboard_brightness = 0.05
 RED = 0
 GREEN = 1
 BLUE = 2
+minute_color = (44, 159, 247)
+hour_color = (244, 191, 66)
+second_color = (249, 246, 57)
 
 # initialize the I2C bus
 myI2C = busio.I2C(board.SCL, board.SDA)
@@ -49,13 +52,19 @@ def clear_pixels(pixels):
 while True:
     start_time = time.monotonic()
     t = rtc.datetime
-    print(t.tm_hour, t.tm_min, t.tm_sec)
 
     # animate the pixels
-    seconds = t.tm_sec % num_onboard_leds
-    print(seconds)
+    hour = t.tm_hour % num_onboard_leds
+    minute = t.tm_min % num_onboard_leds
+    second = t.tm_sec % num_onboard_leds
+
+    print(t.tm_hour, t.tm_min, t.tm_sec)
+    print(hour, minute, second)
+
     clear_pixels(onboard_pixels)
-    pixels[seconds] = (255,255,0)
+    pixels[hour] = hour_color
+    pixels[minute] = minute_color
+    pixels[second] = second_color
     pixels.show()
 
     tick_time = start_time
