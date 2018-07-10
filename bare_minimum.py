@@ -3,6 +3,7 @@ import neopixel
 from time import sleep
 import adafruit_ds3231
 import busio
+from math import floor
 
 num_leds = 120
 
@@ -16,7 +17,7 @@ outboards = neopixel.NeoPixel(board.A1, num_leds, brightness=0.05, auto_write=Fa
 
 
 for i in range(num_leds):
-    outboards[i] = (255,255,0)
+    outboards[i] = (0,0,0)
     
     
 outboards.show()
@@ -27,9 +28,20 @@ myI2C = busio.I2C(board.SCL, board.SDA)
 # create the rtc object to talk to the rtc board
 rtc = adafruit_ds3231.DS3231(myI2C)
 
+# indexes into our pixels array to represent the clock hands
+hour = 0
+minute = 0
+second = 0
+
 while True:
     t = rtc.datetime
     
-    print(t.tm_hour, t.tm_min, t.tm_sec)
+    #print(t.tm_hour, t.tm_min, t.tm_sec)
+    outboards[hour] = (0,0,0)
+    #outboards.show()
+    hour = put_value_into_pixels_range(t.tm_hour, 24, num_leds)
+    outboards[hour] = (255,255,0)
+    outboards.show()
+    print(hour)
     
     sleep(1)
