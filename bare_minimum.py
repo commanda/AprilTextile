@@ -4,8 +4,12 @@ from time import sleep
 import adafruit_ds3231
 import busio
 
+
 def normalize(x, old_min, old_max, new_min, new_max):
     return (((x - old_min) / (old_max - old_min)) * (new_max - new_min)) + new_min
+
+def put_value_into_pixels_range(x, max, num_leds):
+    return num_leds - floor(normalize(x, 0, max, 0, num_leds-1)) - 1
 
 outboards = neopixel.NeoPixel(board.A1, 120, brightness=0.05, auto_write=False)
 
