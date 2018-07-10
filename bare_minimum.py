@@ -38,9 +38,16 @@ while True:
     
     #print(t.tm_hour, t.tm_min, t.tm_sec)
     outboards[hour] = (0,0,0)
+    outboards[minute] = (0,0,0)
+    outboards[second] = (0,0,0)
     #outboards.show()
     hour = put_value_into_pixels_range(t.tm_hour, 24, num_leds)
-    outboards[hour] = (255,255,0)
+    minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
+    second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
+    
+    outboards[hour] = (244, 191, 66)
+    outboards[minute] = (44, 159, 247)
+    outboards[second] = (249, 246, 57)
     outboards.show()
     print(hour)
     
