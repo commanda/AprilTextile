@@ -25,7 +25,6 @@ def stamp_caterpillar(around_index, size, primary, secondary):
         color = primary
         if (k < size/3 or k >= (2*(size/3))):
             color = secondary
-        #outboards[i % num_leds]    = color
         q = i % num_leds
         buf[(q * bpp) + 0] = color[R]
         buf[(q * bpp) + 1] = color[G]
@@ -54,7 +53,7 @@ hour = 0
 minute = 0
 second = 0
 
-party_mode = False
+party_mode = True
 
 while True:
 
