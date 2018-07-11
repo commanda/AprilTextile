@@ -5,6 +5,7 @@ from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
+from whole_image_party_pixels import whole_image_party_pixels
 
 G = 0
 R = 1
@@ -43,7 +44,6 @@ for i in range(num_leds):
     buf[(i * bpp) + R] = black[R]
     buf[(i * bpp) + G] = black[G]
     buf[(i * bpp) + B] = black[B]
-    
 
 myI2C = busio.I2C(board.SCL, board.SDA)
 
@@ -53,12 +53,16 @@ hour = 0
 minute = 0
 second = 0
 
-party_mode = True
+party_pixels_index = 0
+
+party_mode = False
 
 while True:
 
     if party_mode == True:
-        stamp_caterpillar(30, 9, (255,0,0), (0,255,0))       
+        party_pixels_index = (party_pixels_index + 1) % 120
+        neopixel_write(pin, party_pixels[party_pixels_index])      
+        sleep(0.1)
 
     else:
         t = rtc.datetime
@@ -79,5 +83,5 @@ while True:
         stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
         stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
 
-    neopixel_write(pin, buf)
+        neopixel_write(pin, buf)
         

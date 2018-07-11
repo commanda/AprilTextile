@@ -1,12 +1,14 @@
 from PIL import Image
+from math import floor
 f = Image.open("grayscale.jpg")
 pix = f.load()
 
-print(f.bits, f.size, f.format)
+brightness = 0.25
 
 array = []
 
 for i in range(f.size[0]):
+    line_array = []
     for j in range(f.size[1]):
         pixel = pix[i,j]
         # blue =  pixel & 255
@@ -16,11 +18,16 @@ for i in range(f.size[0]):
         # print(pixel)
         # print(red, green, blue, alpha)
         # there's only stuff in the "blue" channel, which is the grayscale value
-        array.append(pixel)
-        
+        #line_array.append(0)
+        line_array.append(int(pixel * brightness))
+        #line_array.append(0)
 
-print(array)
-print("done")
+    array.append('bytes([' + ','.join(str(e) for e in line_array) + '])\n')
+        
+print("party_pixels = [")
+print(', '.join(array))
+print("]")
+
 
 
 
