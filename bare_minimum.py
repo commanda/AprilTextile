@@ -27,9 +27,9 @@ def put_value_into_pixels_range(x, max, num_leds):
 outboards = neopixel.NeoPixel(board.A1, num_leds, brightness=0.5, auto_write=False)
 
 
+black = (0,0,0)
 for i in range(num_leds):
-    outboards[i] = (0,0,0)
-    
+    outboards[i] = black
     
 outboards.show()
 
@@ -41,27 +41,34 @@ hour = 0
 minute = 0
 second = 0
 
-black = (0,0,0)
+party_mode = True
 
 while True:
-    t = rtc.datetime
 
-    stamp_caterpillar(hour, 10, black, black)
-    stamp_caterpillar(minute, 6, black, black)
-    stamp_caterpillar(second, 3, black, black)
+    if party_mode == True:
+        for i in range(10):
+            outboards[i] = (255,255,255)
+        outboards.show()
 
-    tmp_hour = t.tm_hour
-    if (tmp_hour >= 12):
-        tmp_hour = tmp_hour - 12
+    else:
+        t = rtc.datetime
 
-    hour = put_value_into_pixels_range(tmp_hour, 12, num_leds)
-    minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
-    second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
-    
-    stamp_caterpillar(hour, 9, (150, 23, 19), (249, 153, 17))
-    stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
-    stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
-    
-    outboards.show()
-    
-    sleep(1)
+        stamp_caterpillar(hour, 10, black, black)
+        stamp_caterpillar(minute, 6, black, black)
+        stamp_caterpillar(second, 3, black, black)
+
+        tmp_hour = t.tm_hour
+        if (tmp_hour >= 12):
+            tmp_hour = tmp_hour - 12
+
+        hour = put_value_into_pixels_range(tmp_hour, 12, num_leds)
+        minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
+        second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
+        
+        stamp_caterpillar(hour, 9, (150, 23, 19), (249, 153, 17))
+        stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
+        stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
+        
+        outboards.show()
+        
+        sleep(1)
