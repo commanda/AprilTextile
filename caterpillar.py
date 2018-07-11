@@ -5,7 +5,7 @@ from math import floor
 
 num_leds = 120
 
-outboards = neopixel.NeoPixel(board.A1, num_leds, brightness=0.05, auto_write=False)
+outboards = neopixel.NeoPixel(board.A1, num_leds, brightness=0.25, auto_write=False)
 
 chosen_blue = 110
 blue = (0,0,255)
@@ -16,7 +16,7 @@ red = (249, 124, 22)
 orange = (247, 199, 27)
 
 chosen_white = chosen_red - 50
-white = (255,255,255)
+white = (0,255,0)
 dark_blue = (9, 2, 132)
 
 def stamp_caterpillar(around_index, size, primary, secondary):
@@ -36,12 +36,12 @@ while True:
         outboards[i] = (0,0,0)
     
     chosen_blue = (chosen_blue + 1) % num_leds
-    chosen_red = (chosen_red + 1) % num_leds
+    chosen_red = (chosen_red - 1) % num_leds
     chosen_white = (chosen_white +1) % num_leds
 
-    stamp_caterpillar(chosen_blue, 12, blue, light_blue)
     stamp_caterpillar(chosen_red, 20, orange, red)
-    stamp_caterpillar(chosen_white, 30, white, dark_blue)
+    stamp_caterpillar(chosen_blue, 5, blue, light_blue)
+    stamp_caterpillar(chosen_white, 10, white, dark_blue)
     
     outboards.show()
     sleep(0.01)
