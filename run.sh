@@ -1,3 +1,3 @@
 #!/bin/bash
-mpy-cross caterpillar.py
-cp caterpillar.mpy /Volumes/CIRCUITPY/lib/
+mpy-cross bare_minimum.py
+cp bare_minimum.mpy /Volumes/CIRCUITPY/lib/

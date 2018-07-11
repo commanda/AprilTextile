@@ -1,11 +1,22 @@
 import board
 import neopixel
-from time import sleep
+from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
 
 num_leds = 120
+
+def stamp_caterpillar(around_index, size, primary, secondary):
+    start = floor(around_index - (size/2))
+    stop = floor(around_index + (size/2)) 
+    k = 0
+    for i in range(start, stop, 1):
+        color = primary
+        if (k < size/3 or k > (2*(size/3))):
+            color = secondary
+        outboards[i % num_leds]    = color
+        k = k+1
 
 def normalize(x, old_min, old_max, new_min, new_max):
     return (((x - old_min) / (old_max - old_min)) * (new_max - new_min)) + new_min
@@ -30,21 +41,23 @@ hour = 0
 minute = 0
 second = 0
 
+black = (0,0,0)
+
 while True:
     t = rtc.datetime
-    
-    outboards[hour] = (0,0,0)
-    outboards[minute] = (0,0,0)
-    outboards[second] = (0,0,0)
+
+    stamp_caterpillar(hour, 10, black, black)
+    stamp_caterpillar(minute, 6, black, black)
+    stamp_caterpillar(second, 3, black, black)
+
     hour = put_value_into_pixels_range(t.tm_hour, 24, num_leds)
     minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
     second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
     
-    outboards[hour] = (244, 191, 66)
-    outboards[minute] = (44, 159, 247)
-    outboards[second] = (249, 246, 57)
-    outboards.show()
+    stamp_caterpillar(hour, 10, (249, 124, 22), (247, 199, 27))
+    stamp_caterpillar(minute, 6, (0,0,255), (82, 143, 242))
+    stamp_caterpillar(second, 3, (0,255,0), (9, 2, 132))
     
-    print(hour, minute, second)
+    outboards.show()
     
     sleep(1)
