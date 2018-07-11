@@ -44,6 +44,7 @@ for i in range(num_leds):
     buf[(i * bpp) + R] = black[R]
     buf[(i * bpp) + G] = black[G]
     buf[(i * bpp) + B] = black[B]
+neopixel_write(pin, buf)  
 
 myI2C = busio.I2C(board.SCL, board.SDA)
 
