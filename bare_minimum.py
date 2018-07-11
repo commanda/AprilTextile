@@ -22,13 +22,10 @@ for i in range(num_leds):
     
 outboards.show()
 
-# initialize the I2C bus
 myI2C = busio.I2C(board.SCL, board.SDA)
 
-# create the rtc object to talk to the rtc board
 rtc = adafruit_ds3231.DS3231(myI2C)
 
-# indexes into our pixels array to represent the clock hands
 hour = 0
 minute = 0
 second = 0
@@ -36,11 +33,9 @@ second = 0
 while True:
     t = rtc.datetime
     
-    #print(t.tm_hour, t.tm_min, t.tm_sec)
     outboards[hour] = (0,0,0)
     outboards[minute] = (0,0,0)
     outboards[second] = (0,0,0)
-    #outboards.show()
     hour = put_value_into_pixels_range(t.tm_hour, 24, num_leds)
     minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
     second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
