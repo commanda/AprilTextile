@@ -1,11 +1,21 @@
 import board
-import neopixel
+import digitalio
+from neopixel_write import neopixel_write
 from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
 
+G = 0
+R = 1
+B = 2
+
 num_leds = 120
+bpp = 3
+buf = bytearray(num_leds * bpp)
+
+pin = digitalio.DigitalInOut(board.A1)
+pin.direction = digitalio.Direction.OUTPUT
 
 def stamp_caterpillar(around_index, size, primary, secondary):
     start = floor(around_index - (size/2))
@@ -15,7 +25,12 @@ def stamp_caterpillar(around_index, size, primary, secondary):
         color = primary
         if (k < size/3 or k >= (2*(size/3))):
             color = secondary
-        outboards[i % num_leds]    = color
+        #outboards[i % num_leds]    = color
+        q = i % num_leds
+        buf[(q * bpp) + 0] = color[R]
+        buf[(q * bpp) + 1] = color[G]
+        buf[(q * bpp) + 2] = color[B]
+        
         k = k+1
 
 def normalize(x, old_min, old_max, new_min, new_max):
@@ -24,14 +39,12 @@ def normalize(x, old_min, old_max, new_min, new_max):
 def put_value_into_pixels_range(x, max, num_leds):
     return floor(normalize(x, 0, max, 0, num_leds-1)) - 1
 
-outboards = neopixel.NeoPixel(board.A1, num_leds, brightness=0.5, auto_write=False)
-
-
 black = (0,0,0)
 for i in range(num_leds):
-    outboards[i] = black
+    buf[(i * bpp) + R] = black[R]
+    buf[(i * bpp) + G] = black[G]
+    buf[(i * bpp) + B] = black[B]
     
-outboards.show()
 
 myI2C = busio.I2C(board.SCL, board.SDA)
 
@@ -41,14 +54,12 @@ hour = 0
 minute = 0
 second = 0
 
-party_mode = True
+party_mode = False
 
 while True:
 
     if party_mode == True:
-        for i in range(10):
-            outboards[i] = (255,255,255)
-        outboards.show()
+        stamp_caterpillar(30, 9, (255,0,0), (0,255,0))       
 
     else:
         t = rtc.datetime
@@ -68,7 +79,6 @@ while True:
         stamp_caterpillar(hour, 9, (150, 23, 19), (249, 153, 17))
         stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
         stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
+
+    neopixel_write(pin, buf)
         
-        outboards.show()
-        
-        sleep(1)
