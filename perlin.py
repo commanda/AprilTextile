@@ -8,14 +8,12 @@ brightness = 0.25
 array = []
 
 for i in range(f.size[0]):
-    line_array = []
     for j in range(f.size[1]):
         pixel = pix[i,j]
-        line_array.append(int(pixel * brightness))
+        array.append(str(int(pixel * brightness)))
 
-    array.append('bytes([' + ','.join(str(e) for e in line_array) + '])\n')
 
-long_string = "party_pixels = [" + ', '.join(array) + "]"
+long_string = "party_pixels = bytes([" + ','.join(array) + "])"
 
 #print(long_string)
 

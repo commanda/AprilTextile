@@ -62,7 +62,7 @@ while True:
 
     if party_mode == True:
         party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
-        neopixel_write(pin, party_pixels[party_pixels_index])      
+        neopixel_write(pin, party_pixels)      
         #neopixel_write(pin, bytes([int(i * self.brightness) for i in party_pixels[party_pixels_index]]))
         sleep(0.1)
 
