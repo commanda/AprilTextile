@@ -3,7 +3,7 @@ from math import floor
 f = Image.open("strip_something.png")
 pix = f.load()
 
-brightness = 1.0
+brightness = 0.25
 G = 0
 R = 1
 B = 2
@@ -16,9 +16,9 @@ for i in range(f.size[0]):
         pixel = pix[i,j]
         print(pixel)
         if isinstance(pixel, tuple):
-            line_array.append(pixel[R]) 
-            line_array.append(pixel[G])
-            line_array.append(pixel[B])
+            line_array.append(int(pixel[R] * brightness)) 
+            line_array.append(int(pixel[G] * brightness))
+            line_array.append(int(pixel[B] * brightness))
         else:
             line_array.append(int(pixel))
 
