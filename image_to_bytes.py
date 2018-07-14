@@ -4,6 +4,9 @@ f = Image.open("strip_something.png")
 pix = f.load()
 
 brightness = 1.0
+G = 0
+R = 1
+B = 2
 
 array = []
 print(f.size)
@@ -13,9 +16,9 @@ for i in range(f.size[0]):
         pixel = pix[i,j]
         print(pixel)
         if isinstance(pixel, tuple):
-            line_array.append(pixel[0]) 
-            line_array.append(pixel[1])
-            line_array.append(pixel[2])
+            line_array.append(pixel[R]) 
+            line_array.append(pixel[G])
+            line_array.append(pixel[B])
         else:
             line_array.append(int(pixel))
 
