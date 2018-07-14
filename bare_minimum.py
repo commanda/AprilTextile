@@ -5,7 +5,7 @@ from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
-from whole_image_party_pixels import party_pixels
+#from whole_image_party_pixels import party_pixels
 
 G = 0
 R = 1
@@ -50,20 +50,25 @@ myI2C = busio.I2C(board.SCL, board.SDA)
 
 rtc = adafruit_ds3231.DS3231(myI2C)
 
+t = rtc.datetime
+
 hour = 0
 minute = 0
 second = 0
 
 party_pixels_index = 0
 
-party_mode = True
+party_mode = False
 
 while True:
 
     if party_mode == True:
-        party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
-        neopixel_write(pin, party_pixels[party_pixels_index])      
-        #neopixel_write(pin, bytes([int(i * self.brightness) for i in party_pixels[party_pixels_index]]))
+        # party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
+        # row = party_pixels[party_pixels_index]
+        # for i in range(len(row)):
+        #     buf[(i * bpp) + R] = row[i]
+
+        # neopixel_write(pin, buf)
         sleep(0.1)
 
     else:

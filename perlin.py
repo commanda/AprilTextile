@@ -1,17 +1,18 @@
 from PIL import Image
 from math import floor
-f = Image.open("Figure_grayscale_small.png")
+f = Image.open("circle_gray.png")
 pix = f.load()
 
-brightness = 0.25
+brightness = 1.0
 
 array = []
-
+print(f.size)
 for i in range(f.size[0]):
     line_array = []
     for j in range(f.size[1]):
         pixel = pix[i,j]
-        line_array.append(int(pixel * brightness))
+        print(pixel)
+        line_array.append(int(pixel))
 
     array.append('bytes([' + ','.join(str(e) for e in line_array) + '])\n')
 
