@@ -18,14 +18,23 @@ buf = bytearray(num_leds * bpp)
 pin = digitalio.DigitalInOut(board.A1)
 pin.direction = digitalio.Direction.OUTPUT
 
+dim_ratio = 0.05
+
 def stamp_caterpillar(around_index, size, primary, secondary):
     start = floor(around_index - (size/2))
     stop = floor(around_index + (size/2)) 
+
+    # the center pixel should be bright, and all other pixels should be dimmer
+    primary_dim = ((int)(primary[0] * dim_ratio), (int)(primary[1] * dim_ratio), (int)(primary[2] * dim_ratio))
+    secondary_dim = ((int)(secondary[0] * dim_ratio), (int)(secondary[1] * dim_ratio), (int)(secondary[2] * 0.5))
+
     k = 0
     for i in range(start, stop, 1):
-        color = primary
+        color = primary_dim
         if (k < size/3 or k >= (2*(size/3))):
-            color = secondary
+            color = secondary_dim
+        elif (i == around_index):
+            color = primary
         q = i % num_leds
         buf[(q * bpp) + 0] = color[R]
         buf[(q * bpp) + 1] = color[G]
