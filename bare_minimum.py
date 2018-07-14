@@ -5,7 +5,7 @@ from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
-#from whole_image_party_pixels import party_pixels
+from whole_image_party_pixels import party_pixels
 
 G = 0
 R = 1
@@ -67,17 +67,17 @@ second = 0
 
 party_pixels_index = 0
 
-party_mode = False
+party_mode = True
 
 while True:
 
     if party_mode == True:
-        # party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
-        # row = party_pixels[party_pixels_index]
-        # for i in range(len(row)):
-        #     buf[(i * bpp) + R] = row[i]
+        party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
+        row = party_pixels[party_pixels_index]
+        for i in range(len(row)):
+            buf[(i * bpp) + R] = row[i]
 
-        # neopixel_write(pin, buf)
+        neopixel_write(pin, buf)
         sleep(0.1)
 
     else:
