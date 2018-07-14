@@ -1,13 +1,13 @@
 from PIL import Image
 from math import floor
-f = Image.open("circle.png")
+f = Image.open("voronoi_small.png")
 pix = f.load()
 
 brightness = 1.0
 
 array = []
 print(f.size)
-for i in range(f.size[0]/16):
+for i in range(3):
     line_array = []
     for j in range(f.size[1]):
         pixel = pix[i,j]
@@ -17,9 +17,9 @@ for i in range(f.size[0]/16):
         else:
             line_array.append(int(pixel))
 
-    array.append('bytes([' + ','.join(str(e) for e in line_array) + '])\n')
+    array.append(','.join(str(e) for e in line_array))
 
-long_string = "party_pixels = [" + ', '.join(array) + "]"
+long_string = "party_pixels = bytes([" + ', '.join(array) + "])"
 
 #print(long_string)
 
