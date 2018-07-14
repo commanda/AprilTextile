@@ -20,6 +20,13 @@ pin.direction = digitalio.Direction.OUTPUT
 
 dim_ratio = 0.05
 
+def clear():
+    for i in range(num_leds):
+        buf[(i * bpp) + R] = black[R]
+        buf[(i * bpp) + G] = black[G]
+        buf[(i * bpp) + B] = black[B]
+    neopixel_write(pin, buf)  
+
 def stamp_caterpillar(around_index, size, primary, secondary):
     start = floor(around_index - (size/2))
     stop = floor(around_index + (size/2)) 
@@ -49,11 +56,7 @@ def put_value_into_pixels_range(x, max, num_leds):
     return floor(normalize(x, 0, max, 0, num_leds-1)) - 1
 
 black = (0,0,0)
-for i in range(num_leds):
-    buf[(i * bpp) + R] = black[R]
-    buf[(i * bpp) + G] = black[G]
-    buf[(i * bpp) + B] = black[B]
-neopixel_write(pin, buf)  
+clear()
 
 myI2C = busio.I2C(board.SCL, board.SDA)
 
@@ -81,6 +84,7 @@ while True:
         sleep(0.1)
         if t.tm_sec not in range(0,10):
             party_mode = False
+            clear()
 
     else:
         stamp_caterpillar(hour, 10, black, black)
@@ -103,4 +107,5 @@ while True:
 
         if t.tm_sec in range(0,10):
             party_mode = True
+            clear()
         
