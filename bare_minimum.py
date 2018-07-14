@@ -67,10 +67,10 @@ second = 0
 
 party_pixels_index = 0
 
-party_mode = True
+party_mode = False
 
 while True:
-
+    t = rtc.datetime
     if party_mode == True:
         party_pixels_index = (party_pixels_index + 1) % len(party_pixels)
         row = party_pixels[party_pixels_index]
@@ -79,10 +79,10 @@ while True:
 
         neopixel_write(pin, buf)
         sleep(0.1)
+        if t.tm_sec not in range(0,10):
+            party_mode = False
 
     else:
-        t = rtc.datetime
-
         stamp_caterpillar(hour, 10, black, black)
         stamp_caterpillar(minute, 6, black, black)
         stamp_caterpillar(second, 3, black, black)
@@ -100,4 +100,7 @@ while True:
         stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
 
         neopixel_write(pin, buf)
+
+        if t.tm_sec in range(0,10):
+            party_mode = True
         
