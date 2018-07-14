@@ -5,6 +5,7 @@ from time import sleep, struct_time
 import adafruit_ds3231
 import busio
 from math import floor
+from random import randint
 
 G = 0
 R = 1
@@ -61,14 +62,19 @@ minute = 0
 second = 0
 party_pixels_index = 0
 party_mode = True
+party_len = 6
 
 while True:
     t = rtc.datetime
     if party_mode == True:
-        
+        for i in range(num_leds):
+            buf[(i * bpp) + R] = randint(0,50)
+            buf[(i * bpp) + G] = randint(0,50)
+            buf[(i * bpp) + B] = randint(0,50)
+
         neopixel_write(pin, buf)
         sleep(0.1)
-        if t.tm_sec not in range(0,10):
+        if t.tm_sec not in range(0,party_len):
             party_mode = False
             clear()
 
@@ -86,7 +92,7 @@ while True:
         stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
         stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
         neopixel_write(pin, buf)
-        if t.tm_sec in range(0,10):
+        if t.tm_sec in range(0,party_len):
             party_mode = True
             clear()
         
