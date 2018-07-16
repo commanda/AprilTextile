@@ -3,7 +3,7 @@ from math import floor
 f = Image.open("satin_small.png")
 pix = f.load()
 
-brightness = 0.25
+brightness = 0.05
 G = 0
 R = 1
 B = 2
