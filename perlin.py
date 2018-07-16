@@ -1,19 +1,21 @@
 from PIL import Image
 from math import floor
-f = Image.open("voronoi_small.png")
+f = Image.open("rainbow_circle_small.jpg")
 pix = f.load()
 
 brightness = 1.0
 
 array = []
-print(f.size)
-for i in range(3):
+#print(f.size)
+for i in range(f.size[0]):
     line_array = []
     for j in range(f.size[1]):
         pixel = pix[i,j]
         print(pixel)
         if isinstance(pixel, tuple):
             line_array.append(pixel[1])
+            line_array.append(pixel[0])
+            line_array.append(pixel[2])
         else:
             line_array.append(int(pixel))
 
@@ -23,7 +25,7 @@ long_string = "party_pixels = bytes([" + ', '.join(array) + "])"
 
 #print(long_string)
 
-with open('whole_image_party_pixels.py', 'w') as f:
+with open('rainbow_circle.py', 'w') as f:
     f.write(long_string)
 
 def normalize(x, old_min, old_max, new_min, new_max):
