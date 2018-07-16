@@ -1,6 +1,6 @@
 from PIL import Image
 from math import floor
-f = Image.open("strip_something.png")
+f = Image.open("satin_small.png")
 pix = f.load()
 
 brightness = 0.25
@@ -28,7 +28,7 @@ long_string = "party_pixels = bytes([" + ', '.join(array) + "])"
 
 #print(long_string)
 
-with open('whole_image_party_pixels.py', 'w') as f:
+with open('satin.py', 'w') as f:
     f.write(long_string)
 
 def normalize(x, old_min, old_max, new_min, new_max):
