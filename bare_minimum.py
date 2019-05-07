@@ -56,29 +56,33 @@ black = (0,0,0)
 clear()
 myI2C = busio.I2C(board.SCL, board.SDA)
 rtc = adafruit_ds3231.DS3231(myI2C)
+#rtc.datetime = struct_time((2018,7,17,7,15,10,0,9,-1))
 t = rtc.datetime
 hour = 0
 minute = 0
 second = 0
-party_mode = False
+party_mode = True
 party_len = 5
 
-party_pixels = bytes([24,60,0, 26,63,0, 28,63,0, 30,63,0, 32,63,0, 34,63,0, 38,63,0, 39,63,0, 39,63,0, 38,63,3, 37,63,8, 35,62,13, 35,61,16, 35,61,16, 35,61,17, 38,63,19, 21,46,10, 1,17,0, 5,22,1, 7,30,1, 1,10,0, 1,9,0, 0,8,0, 0,5,0, 0,5,0, 0,4,0, 23,44,6, 32,59,7, 1,9,0, 1,10,0, 1,12,0, 0,5,0, 12,26,8, 42,57,34, 40,56,31, 39,57,29, 38,58,21, 40,63,20, 42,61,31, 42,57,33, 41,56,33, 41,55,34, 42,55,35, 42,55,35, 42,57,34, 42,59,33, 41,60,32, 40,60,31, 39,58,31, 36,56,30, 34,56,29, 34,58,28, 34,58,28, 32,57,26, 31,57,25, 34,57,29, 37,55,32, 38,51,34, 40,49,35, 43,49,37, 43,48,37, 44,46,38, 45,44,41, 44,45,41, 44,49,39, 43,54,36, 42,56,33, 42,58,31, 39,60,28, 36,61,22, 29,60,17, 19,54,13, 10,47,9, 5,45,7, 3,42,7, 5,41,9, 8,42,11, 12,44,15, 15,46,17, 18,47,19, 21,49,21, 23,49,23, 25,48,24, 24,45,25, 24,43,24, 24,42,25, 22,40,23, 22,38,23, 21,37,23, 19,36,22, 19,35,22, 16,33,20, 15,32,20, 18,34,22, 17,33,21, 14,32,20, 12,32,18, 11,32,18, 12,33,19, 10,31,18, 7,28,15, 5,25,14, 3,22,13, 2,20,12, 1,18,12, 1,17,11, 1,16,10, 1,15,10, 1,14,10, 1,13,9, 1,13,9, 1,13,9, 1,12,9, 1,13,9, 1,13,9, 1,14,9])
+party_pixels = bytes([5,1,11, 4,1,11, 3,0,10, 2,0,9, 3,0,10, 3,1,10, 1,0,9, 2,0,9, 2,0,10, 3,0,10, 4,1,11, 4,1,11, 5,1,11, 5,1,11, 5,1,11, 5,1,11, 6,1,11, 6,2,11, 6,2,11, 6,2,11, 6,2,11, 7,2,12, 6,2,11, 7,2,12, 6,1,11, 6,1,11, 7,2,12, 7,2,12, 7,2,12, 7,2,12, 6,2,12, 3,0,11, 0,0,6, 0,0,4, 0,0,5, 1,0,6, 1,0,6, 1,0,7, 1,0,7, 1,0,7, 1,0,7, 1,0,7, 1,0,7, 1,0,7, 1,0,7, 1,0,8, 1,0,8, 2,0,10, 3,0,11, 2,0,8, 0,0,3, 0,0,4, 1,0,7, 2,0,9, 4,1,10, 5,1,11, 6,2,12, 6,2,12, 5,1,11, 4,1,11, 4,1,11, 6,1,12, 3,1,7, 0,0,3, 1,0,8, 3,0,10, 6,2,12, 2,0,10, 1,0,7, 1,0,8, 1,0,9, 4,1,10, 4,1,10, 0,0,5, 0,0,2, 0,0,4, 0,0,5, 0,0,6, 0,0,5, 0,0,5, 1,0,8, 1,0,9, 2,0,9, 2,0,10, 3,1,10, 6,2,11, 5,2,11, 3,0,10, 2,0,9, 1,0,7, 1,0,6, 0,0,4, 1,0,7, 4,1,11, 6,2,11, 6,2,11, 5,1,11, 4,0,11, 2,0,10, 2,0,9, 2,0,9, 2,0,9, 1,0,9, 1,0,8, 1,0,7, 1,0,6, 0,0,6, 0,0,5, 4,1,10, 6,1,11, 5,1,11, 5,1,11, 4,1,10, 4,1,11, 6,2,12, 5,1,11, 4,1,10, 3,0,10, 2,0,10, 2,0,9])
 
-party_index = 0
+p = 0
 party_pixels_len = len(party_pixels)
 
 while True:
     t = rtc.datetime
     if party_mode == True:
-        for i in range(len(party_pixels)/bpp):
-            print(i + party_index)
-            buf[(i * bpp) + R] = party_pixels[(((i + party_index) * bpp) + R) % party_pixels_len]
-            buf[(i * bpp) + G] = party_pixels[(((i + party_index) * bpp) + G) % party_pixels_len]
-            buf[(i * bpp) + B] = party_pixels[(((i + party_index) * bpp) + B) % party_pixels_len]
+        for i in range(num_leds):
+            if i < num_leds/2:
+                pix = i * bpp
+            else:
+                pix = (num_leds - 1 - (i - int(num_leds/2))) * bpp
+        
+            buf[pix + R] = party_pixels[(((i + p) * bpp) % party_pixels_len) + R]
+            buf[pix + G] = party_pixels[(((i + p) * bpp) % party_pixels_len) + G]
+            buf[pix + B] = party_pixels[(((i + p) * bpp) % party_pixels_len) + B]
         neopixel_write(pin, buf)
-        party_index = int(party_index - 1) 
-        sleep(0.1)
+        p = (p - 1) % int(party_pixels_len/bpp)
         if t.tm_sec not in range(0,party_len):
             party_mode = False
             clear()
@@ -93,9 +97,9 @@ while True:
         hour = put_value_into_pixels_range(tmp_hour, 12, num_leds)
         minute = put_value_into_pixels_range(t.tm_min, 60, num_leds)
         second = put_value_into_pixels_range(t.tm_sec, 60, num_leds)
-        stamp_caterpillar(hour, 9, (150, 23, 19), (249, 153, 17))
-        stamp_caterpillar(minute, 6, (2, 22, 242), (82, 143, 242))
-        stamp_caterpillar(second, 3, (255,255,255), (255, 255, 0))
+        stamp_caterpillar(hour, 9, (239, 119, 235), (145, 4, 140))
+        stamp_caterpillar(minute, 6, (217, 146, 244), (110, 27, 142))
+        stamp_caterpillar(second, 3, (242, 186, 237), (122, 68, 117))
         neopixel_write(pin, buf)
         if t.tm_sec in range(0,party_len):
             party_mode = True
