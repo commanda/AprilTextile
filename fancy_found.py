@@ -110,7 +110,7 @@ while True:
     # save button press state
     prevkeystate = currkeystate
 
-    ledmode = 7
+    ledmode = 1
 
     # Fire Colors [ HEAT ]
     if ( ledmode == 1 ):
